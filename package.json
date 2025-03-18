@@ -9,7 +9,7 @@
     "test": "vitest",
     "build": "tsc",
     "migrate": "npm run knex -- migrate:latest",
-    "start": "node build/server.js",
+    "start": "node build/src/server.js",
     "deploy": "npm i && npm run build && npm run migrate && npm start"
   },
   "keywords": [],

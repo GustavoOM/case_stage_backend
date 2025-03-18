@@ -1,6 +1,18 @@
 import 'dotenv/config';
 import { Knex } from 'knex';
 
+const production: Knex.Config = {
+  client: 'pg',
+  connection: {
+    connectionString: process.env.DATABASE_URL, // URL do banco de dados
+    ssl: { rejectUnauthorized: false }, // Habilita SSL
+  },
+  migrations: {
+    extension: 'ts',
+    directory: './db/migrations',
+  },
+};
+
 const development: Knex.Config = {
   client: 'sqlite3',
   connection: {
@@ -11,23 +23,8 @@ const development: Knex.Config = {
     extension: 'ts',
     directory: './db/migrations',
   },
-  pool: {
-    afterCreate: (conn: any, done: (err?: Error | null) => void) => {
-      conn.run('PRAGMA foreign_keys = ON;', done);
-    },
-  },
 };
 
-const production: Knex.Config = {
-  client: 'pg',
-  connection: process.env.DATABASE_URL,
-  migrations: {
-    extension: 'ts',
-    directory: './db/migrations',
-  },
-};
-
-// Função para garantir que a configuração nunca seja undefined
 function getConfig(): Knex.Config {
   const env = process.env.NODE_ENV || 'development';
   if (env === 'production') {
@@ -36,5 +33,4 @@ function getConfig(): Knex.Config {
   return development;
 }
 
-// Exporte a configuração correta
 export default getConfig();

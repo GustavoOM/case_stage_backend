@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } from "fastify";
 import { knex } from "./database";
 import { z } from "zod";
 import { randomUUID } from "crypto";
@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
     // Rotas para Área
-    fastify.post("/area", async (request, reply) => {
+    fastify.post("/area", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
             const createAreaBodySchema = z.object({
                 name: z.string()
@@ -32,7 +32,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return { areas };
     });
 
-    fastify.get("/area/:id", async (request, reply) => {
+    fastify.get("/area/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
             const getAreasParamsSchema = z.object({
                 id: z.string().uuid()
@@ -51,7 +51,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         }
     });
 
-    fastify.put("/area/:id", async (request, reply) => {
+    fastify.put("/area/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         const getAreasParamsSchema = z.object({
             id: z.string().uuid()
         });
@@ -72,7 +72,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return reply.status(204).send();
     });
 
-    fastify.delete("/area/:id", async (request, reply) => {
+    fastify.delete("/area/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         const getAreasParamsSchema = z.object({
             id: z.string().uuid()
         });
@@ -91,7 +91,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
 
 
     // Rotas para Processo
-    fastify.post("/process", async (request, reply) => {
+    fastify.post("/process", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
             const createProcessBodySchema = z.object({
                 name: z.string(),
@@ -127,7 +127,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return { processes };
     });
 
-    fastify.get("/process/:id", async (request, reply) => {
+    fastify.get("/process/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         const getProcessParamsSchema = z.object({
             id: z.string().uuid()
         });
@@ -141,7 +141,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return { process };
     });
 
-    fastify.put("/process/:id", async (request, reply) => {
+    fastify.put("/process/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         const getProcessParamsSchema = z.object({
             id: z.string().uuid()
         });
@@ -171,7 +171,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return reply.status(204).send();
     });
 
-    fastify.delete("/process/:id", async (request, reply) => {
+    fastify.delete("/process/:id", async (request:FastifyRequest, reply:FastifyReply) => {
         const getProcessParamsSchema = z.object({
             id: z.string().uuid()
         });

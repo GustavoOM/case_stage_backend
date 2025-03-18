@@ -1,26 +1,5 @@
-import { knex as setupKnex, Knex } from "knex";
-import { Database } from "sqlite3";
+import { knex as setupKnex, Knex } from 'knex';
+import config from '../knexfile'; // Importe a configuração do knexfile.ts
 
-export const config: Knex.Config = {
-    client: "sqlite3",
-    connection: {
-        filename: "./db/app.db", 
-    },
-    useNullAsDefault: true, 
-    migrations: {
-        extension: "ts",
-        directory: "./db/migrations", 
-    },
-    pool: {
-        afterCreate: (conn: Database, done: (err?: Error | null) => void) => {
-            conn.run("PRAGMA foreign_keys = ON;", (err) => {
-                if (err) {
-                } else {
-                    done();
-                }
-            });
-        },
-    },
-};
-
+// Crie a instância do Knex com a configuração importada
 export const knex = setupKnex(config);

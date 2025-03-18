@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyPluginOptions, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { knex } from "./database";
 import { z } from "zod";
 import { randomUUID } from "crypto";
@@ -89,7 +89,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
     });
 
 
-    
+
     // Rotas para Processo
     fastify.post("/process", async (request, reply) => {
         try {

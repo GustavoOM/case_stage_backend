@@ -1,7 +1,10 @@
-import {app} from "./app"
+import { app } from "./app";
+
+const port = process.env.PORT || 3333;
 
 app.listen({
-    port: 3333
+    port: Number(port),
+    host: '0.0.0.0'
 }).then(() => {
-    console.log("HTTP Server Running!")
-})
+    console.log(`HTTP Server Running on port ${port}!`);
+});

@@ -4,8 +4,8 @@ import { Knex } from 'knex';
 const production: Knex.Config = {
     client: 'pg',
     connection: {
-      connectionString: process.env.DATABASE_URL, // URL do banco de dados
-      ssl: { rejectUnauthorized: false }, // Habilita SSL
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }, 
     },
     migrations: {
       extension: 'ts',

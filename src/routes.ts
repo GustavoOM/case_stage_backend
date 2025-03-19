@@ -5,6 +5,16 @@ import { randomUUID } from "crypto";
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
+    fastify.post("/teste", async (request:FastifyRequest, reply:FastifyReply) => {
+        try {
+            return reply.status(201).send({ ok: "ok" });
+        } catch (error) {
+            console.error(error);
+            return reply.status(500).send({ error: "Internal server error" });
+        }
+    });
+
+
     // Rotas para Área
     fastify.post("/area", async (request:FastifyRequest, reply:FastifyReply) => {
         try {

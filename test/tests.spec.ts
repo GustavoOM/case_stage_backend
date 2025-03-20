@@ -30,7 +30,6 @@ describe("Area Endpoints", () => {
     });
 
     test("O usuário consegue buscar uma área por ID", async () => {
-        // Cria uma área para testar a busca
         const createResponse = await request(app.server)
             .post("/area")
             .send({
@@ -57,7 +56,6 @@ describe("Area Endpoints", () => {
     });
 
     test("O usuário consegue atualizar uma área", async () => {
-        // Cria uma área para testar a atualização
         const createResponse = await request(app.server)
             .post("/area")
             .send({
@@ -73,7 +71,6 @@ describe("Area Endpoints", () => {
             })
             .expect(204);
 
-        // Verifica se a área foi atualizada
         const getResponse = await request(app.server)
             .get(`/area/${areaId}`)
             .expect(200);
@@ -91,7 +88,6 @@ describe("Area Endpoints", () => {
     });
 
     test("O usuário consegue deletar uma área", async () => {
-        // Cria uma área para testar a deleção
         const createResponse = await request(app.server)
             .post("/area")
             .send({
@@ -104,7 +100,6 @@ describe("Area Endpoints", () => {
             .delete(`/area/${areaId}`)
             .expect(204);
 
-        // Verifica se a área foi deletada
         await request(app.server)
             .get(`/area/${areaId}`)
             .expect(404);
@@ -121,7 +116,6 @@ describe("Process Endpoints", () => {
     let areaId: string;
 
     beforeAll(async () => {
-        // Cria uma área para associar ao processo
         const createAreaResponse = await request(app.server)
             .post("/area")
             .send({
@@ -153,7 +147,6 @@ describe("Process Endpoints", () => {
     });
 
     test("O usuário consegue buscar um processo por ID", async () => {
-        // Cria um processo para testar a busca
         const createResponse = await request(app.server)
             .post("/process")
             .send({
@@ -189,7 +182,6 @@ describe("Process Endpoints", () => {
     });
 
     test("O usuário consegue atualizar um processo", async () => {
-        // Cria um processo para testar a atualização
         const createResponse = await request(app.server)
             .post("/process")
             .send({
@@ -209,7 +201,6 @@ describe("Process Endpoints", () => {
             })
             .expect(204);
 
-        // Verifica se o processo foi atualizado
         const getResponse = await request(app.server)
             .get(`/process/${processId}`)
             .expect(200);
@@ -227,7 +218,6 @@ describe("Process Endpoints", () => {
     });
 
     test("O usuário consegue deletar um processo", async () => {
-        // Cria um processo para testar a deleção
         const createResponse = await request(app.server)
             .post("/process")
             .send({
@@ -244,7 +234,6 @@ describe("Process Endpoints", () => {
             .delete(`/process/${processId}`)
             .expect(204);
 
-        // Verifica se o processo foi deletado
         await request(app.server)
             .get(`/process/${processId}`)
             .expect(404);

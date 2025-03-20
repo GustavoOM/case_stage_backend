@@ -5,7 +5,6 @@ import { randomUUID } from "crypto";
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
-    // Rotas para Área
     fastify.post("/area", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
             const createAreaBodySchema = z.object({
@@ -20,7 +19,7 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
                 name,
             });
     
-            return reply.status(201).send({ id }); // Retorna o ID criado
+            return reply.status(201).send({ id });
         } catch (error) {
             console.error(error);
             return reply.status(500).send({ error: "Internal server error" });
@@ -78,23 +77,19 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         });
         const { id } = getAreasParamsSchema.parse(request.params);
     
-        // Verifica se a área existe
         const areaExists = await knex("area").where("id", id).first();
         if (!areaExists) {
             return reply.status(404).send({ error: "Area not found" });
         }
     
-        // Exclui todos os processos associados à área
         await knex("process").where("area_id", id).delete();
     
-        // Exclui a área
         await knex("area").where("id", id).delete();
     
         return reply.status(204).send();
     });
 
 
-    // Rotas para Processo
     fastify.post("/process", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
             const createProcessBodySchema = z.object({
@@ -137,16 +132,13 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         });
         const { id } = getProcessParamsSchema.parse(request.params);
     
-        // Busca o processo principal
         const process = await knex("process").where("id", id).first();
         if (!process) {
             return reply.status(404).send({ error: "Process not found" });
         }
     
-        // Busca os filhos do processo
         const children = await knex("process").where("father_process", id);
     
-        // Retorna o processo principal junto com seus filhos
         return { 
             process: {
                 ...process,

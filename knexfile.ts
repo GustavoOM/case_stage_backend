@@ -11,6 +11,9 @@ const production: Knex.Config = {
       extension: 'ts',
       directory: './db/migrations',
     },
+    seeds: {
+      directory: './db/seeds',
+    },
   };
 
 const development: Knex.Config = {
@@ -23,6 +26,9 @@ const development: Knex.Config = {
     extension: 'ts',
     directory: './db/migrations',
   },
+  seeds: {
+    directory: './db/seeds',
+  }
 };
 
 function getConfig(): Knex.Config {

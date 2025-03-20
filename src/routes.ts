@@ -5,16 +5,6 @@ import { randomUUID } from "crypto";
 
 export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
-    fastify.get("/teste", async (request:FastifyRequest, reply:FastifyReply) => {
-        try {
-            return reply.status(201).send({ ok: "ok" });
-        } catch (error) {
-            console.error(error);
-            return reply.status(500).send({ error: "Internal server error" });
-        }
-    });
-
-
     // Rotas para Área
     fastify.post("/area", async (request:FastifyRequest, reply:FastifyReply) => {
         try {
@@ -82,22 +72,26 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return reply.status(204).send();
     });
 
-    fastify.delete("/area/:id", async (request:FastifyRequest, reply:FastifyReply) => {
+    fastify.delete("/area/:id", async (request: FastifyRequest, reply: FastifyReply) => {
         const getAreasParamsSchema = z.object({
             id: z.string().uuid()
         });
         const { id } = getAreasParamsSchema.parse(request.params);
-
+    
+        // Verifica se a área existe
         const areaExists = await knex("area").where("id", id).first();
         if (!areaExists) {
             return reply.status(404).send({ error: "Area not found" });
         }
-
+    
+        // Exclui todos os processos associados à área
+        await knex("process").where("area_id", id).delete();
+    
+        // Exclui a área
         await knex("area").where("id", id).delete();
-
+    
         return reply.status(204).send();
     });
-
 
 
     // Rotas para Processo
@@ -105,9 +99,9 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         try {
             const createProcessBodySchema = z.object({
                 name: z.string(),
-                tools: z.string(),
-                responsibles: z.string(),
-                documentations: z.string(),
+                tools: z.string().optional(),
+                responsibles: z.string().optional(),
+                documentations: z.string().optional(),
                 father_process: z.string().uuid().optional(),
                 area_id: z.string().uuid(),
             });
@@ -137,18 +131,28 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return { processes };
     });
 
-    fastify.get("/process/:id", async (request:FastifyRequest, reply:FastifyReply) => {
+    fastify.get("/process/:id", async (request: FastifyRequest, reply: FastifyReply) => {
         const getProcessParamsSchema = z.object({
             id: z.string().uuid()
         });
         const { id } = getProcessParamsSchema.parse(request.params);
-
+    
+        // Busca o processo principal
         const process = await knex("process").where("id", id).first();
         if (!process) {
             return reply.status(404).send({ error: "Process not found" });
         }
-
-        return { process };
+    
+        // Busca os filhos do processo
+        const children = await knex("process").where("father_process", id);
+    
+        // Retorna o processo principal junto com seus filhos
+        return { 
+            process: {
+                ...process,
+                children
+            }
+        };
     });
 
     fastify.put("/process/:id", async (request:FastifyRequest, reply:FastifyReply) => {
